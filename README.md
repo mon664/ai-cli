@@ -3,8 +3,8 @@
 [![License: Apache 2.0](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](https://opensource.org/licenses/Apache-2.0)
 [![Rust](https://img.shields.io/badge/rust-1.91+-orange.svg)](https://www.rust-lang.org)
 [![Platform](https://img.shields.io/badge/platform-Windows%20%7C%20macOS%20%7C%20Linux-lightgrey.svg)]()
-[![Website](https://img.shields.io/badge/website-Live-green.svg)](https://your-username.github.io/ai-cli/)
-[![Demo](https://img.shields.io/badge/demo-Interactive-purple.svg)](https://your-username.github.io/ai-cli/demo.html)
+[![Website](https://img.shields.io/badge/website-Live-green.svg)](https://[GITHUB_USERNAME].github.io/ai-cli/)
+[![Demo](https://img.shields.io/badge/demo-Interactive-purple.svg)](https://[GITHUB_USERNAME].github.io/ai-cli/demo.html)
 
 AI CLI는 개발자의 Git 워크플로우를 혁신하는 지능형 커맨드 라인 도구입니다. 로컬 및 클라우드 AI 모델을 활용하여 전문적인 커밋 메시지를 자동 생성하고 코드 변경 사항을 설명해줍니다.
 
@@ -19,8 +19,8 @@ AI CLI는 개발자의 Git 워크플로우를 혁신하는 지능형 커맨드 �
 
 ## 🌐 웹사이트 및 데모
 
-- **[공식 웹사이트](https://your-username.github.io/ai-cli/)**: 전체 기능 소개 및 문서
-- **[인터랙티브 데모](https://your-username.github.io/ai-cli/demo.html)**: 브라우저에서 AI CLI 직접 체험하기
+- **[공식 웹사이트](https://[GITHUB_USERNAME].github.io/ai-cli/)**: 전체 기능 소개 및 문서
+- **[인터랙티브 데모](https://[GITHUB_USERNAME].github.io/ai-cli/demo.html)**: 브라우저에서 AI CLI 직접 체험하기
 
 ## 🚀 빠른 시작
 
