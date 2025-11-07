@@ -1,0 +1,517 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CLI - Interactive Demo</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .terminal {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+            min-height: 300px;
+            max-height: 500px;
+            overflow-y: auto;
+        }
+        .terminal-input {
+            color: #4ade80;
+        }
+        .terminal-output {
+            color: #e5e7eb;
+        }
+        .terminal-error {
+            color: #f87171;
+        }
+        .terminal-success {
+            color: #4ade80;
+        }
+        .typing-indicator {
+            display: inline-block;
+        }
+        .typing-indicator::after {
+            content: '█';
+            animation: blink 1s infinite;
+        }
+        @keyframes blink {
+            0%, 50% { opacity: 1; }
+            51%, 100% { opacity: 0; }
+        }
+        .feature-tab {
+            transition: all 0.3s ease;
+        }
+        .feature-tab.active {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-terminal text-green-500 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">AI CLI Demo</span>
+                    </div>
+                </div>
+                <a href="index.html" class="text-gray-700 hover:text-green-500 transition">
+                    <i class="fas fa-arrow-left mr-2"></i>Back to Home
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-16 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="text-center">
+                <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                    Try AI CLI in Your Browser
+                </h1>
+                <p class="text-xl text-gray-200 mb-8">
+                    Experience the power of AI-powered Git workflow automation without installation
+                </p>
+                <div class="bg-white/10 backdrop-blur-sm rounded-lg p-4 inline-block">
+                    <p class="text-sm">
+                        <i class="fas fa-info-circle mr-2"></i>
+                        This is a simulated demo. In production, AI CLI connects to real AI models.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Demo Interface -->
+    <section class="py-16">
+        <div class="container mx-auto px-6">
+            <div class="grid lg:grid-cols-3 gap-8">
+                <!-- Command Panel -->
+                <div class="lg:col-span-2">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h2 class="text-2xl font-bold text-gray-800 mb-6">
+                            <i class="fas fa-terminal text-green-500 mr-2"></i>
+                            Interactive Terminal
+                        </h2>
+
+                        <div class="terminal" id="terminal">
+                            <div class="flex items-center mb-4">
+                                <span class="text-red-500">●</span>
+                                <span class="text-yellow-500 ml-2">●</span>
+                                <span class="text-green-500 ml-2">●</span>
+                                <span class="ml-4 text-gray-400">ai-cli-demo</span>
+                            </div>
+
+                            <div id="terminalContent">
+                                <div class="terminal-output mb-2">
+                                    Welcome to AI CLI Demo! Type 'help' to see available commands.
+                                </div>
+                                <div class="terminal-input mb-2">$ <span id="currentInput"></span><span class="typing-indicator"></span></div>
+                            </div>
+                        </div>
+
+                        <div class="mt-4 flex">
+                            <input
+                                type="text"
+                                id="commandInput"
+                                class="flex-1 bg-gray-100 border border-gray-300 rounded-l-lg px-4 py-2 focus:outline-none focus:ring-2 focus:ring-green-500"
+                                placeholder="Enter a command..."
+                                onkeypress="handleCommand(event)"
+                            >
+                            <button
+                                onclick="executeCommand()"
+                                class="bg-green-500 hover:bg-green-600 text-white px-6 py-2 rounded-r-lg transition duration-300"
+                            >
+                                <i class="fas fa-play mr-2"></i>Run
+                            </button>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Features Panel -->
+                <div class="lg:col-span-1">
+                    <div class="bg-white rounded-lg shadow-lg p-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">
+                            <i class="fas fa-magic text-purple-500 mr-2"></i>
+                            Quick Commands
+                        </h3>
+
+                        <div class="space-y-3">
+                            <button
+                                onclick="runQuickCommand('help')"
+                                class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-gray-800">help</div>
+                                <div class="text-sm text-gray-600">Show available commands</div>
+                            </button>
+
+                            <button
+                                onclick="runQuickCommand('ai-cli commit --demo')"
+                                class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-gray-800">ai-cli commit --demo</div>
+                                <div class="text-sm text-gray-600">Generate demo commit message</div>
+                            </button>
+
+                            <button
+                                onclick="runQuickCommand('ai-cli explain --demo')"
+                                class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-gray-800">ai-cli explain --demo</div>
+                                <div class="text-sm text-gray-600">Explain demo changes</div>
+                            </button>
+
+                            <button
+                                onclick="runQuickCommand('ai-cli init --demo')"
+                                class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-gray-800">ai-cli init --demo</div>
+                                <div class="text-sm text-gray-600">Initialize demo configuration</div>
+                            </button>
+
+                            <button
+                                onclick="runQuickCommand('status')"
+                                class="w-full text-left p-3 bg-gray-50 hover:bg-gray-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-gray-800">status</div>
+                                <div class="text-sm text-gray-600">Show Git status</div>
+                            </button>
+
+                            <button
+                                onclick="clearTerminal()"
+                                class="w-full text-left p-3 bg-red-50 hover:bg-red-100 rounded-lg transition duration-300"
+                            >
+                                <div class="font-semibold text-red-800">clear</div>
+                                <div class="text-sm text-red-600">Clear terminal</div>
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Feature Tabs -->
+                    <div class="bg-white rounded-lg shadow-lg p-6 mt-6">
+                        <h3 class="text-xl font-bold text-gray-800 mb-6">
+                            <i class="fas fa-star text-yellow-500 mr-2"></i>
+                            Features
+                        </h3>
+
+                        <div class="space-y-2">
+                            <div class="feature-tab active p-3 rounded-lg cursor-pointer" onclick="showFeature('security')">
+                                <div class="font-semibold">🛡️ Security</div>
+                            </div>
+                            <div class="feature-tab p-3 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100" onclick="showFeature('performance')">
+                                <div class="font-semibold">⚡ Performance</div>
+                            </div>
+                            <div class="feature-tab p-3 rounded-lg cursor-pointer bg-gray-50 hover:bg-gray-100" onclick="showFeature('ai-models')">
+                                <div class="font-semibold">🤖 AI Models</div>
+                            </div>
+                        </div>
+
+                        <div id="featureContent" class="mt-4 p-4 bg-gray-50 rounded-lg">
+                            <p class="text-sm text-gray-600">
+                                Multi-layer security with trusted folders, session-based approvals, and dangerous command detection.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Example Scenarios -->
+    <section class="py-16 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-12">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Common Workflows
+                </h2>
+                <p class="text-xl text-gray-600">
+                    See how AI CLI can transform your development workflow
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-green-500 text-3xl mb-4">
+                        <i class="fas fa-code-commit"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Smart Commits</h3>
+                    <p class="text-gray-600 mb-4">
+                        Generate meaningful commit messages that follow Conventional Commits specification.
+                    </p>
+                    <button onclick="runQuickCommand('ai-cli commit --scenario daily')" class="text-green-600 hover:text-green-700 font-semibold">
+                        Try This Scenario →
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-green-500 text-3xl mb-4">
+                        <i class="fas fa-search"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Code Reviews</h3>
+                    <p class="text-gray-600 mb-4">
+                        Get AI-powered explanations of code changes for better understanding and reviews.
+                    </p>
+                    <button onclick="runQuickCommand('ai-cli explain --scenario review')" class="text-green-600 hover:text-green-700 font-semibold">
+                        Try This Scenario →
+                    </button>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <div class="text-green-500 text-3xl mb-4">
+                        <i class="fas fa-history"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Project History</h3>
+                    <p class="text-gray-600 mb-4">
+                        Analyze and understand the evolution of your codebase with AI assistance.
+                    </p>
+                    <button onclick="runQuickCommand('ai-cli explain --scenario history')" class="text-green-600 hover:text-green-700 font-semibold">
+                        Try This Scenario →
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <script>
+        const commandHistory = [];
+        let historyIndex = -1;
+
+        function handleCommand(event) {
+            if (event.key === 'Enter') {
+                executeCommand();
+            } else if (event.key === 'ArrowUp') {
+                event.preventDefault();
+                if (historyIndex < commandHistory.length - 1) {
+                    historyIndex++;
+                    document.getElementById('commandInput').value = commandHistory[commandHistory.length - 1 - historyIndex];
+                }
+            } else if (event.key === 'ArrowDown') {
+                event.preventDefault();
+                if (historyIndex > 0) {
+                    historyIndex--;
+                    document.getElementById('commandInput').value = commandHistory[commandHistory.length - 1 - historyIndex];
+                } else if (historyIndex === 0) {
+                    historyIndex = -1;
+                    document.getElementById('commandInput').value = '';
+                }
+            }
+        }
+
+        function executeCommand() {
+            const input = document.getElementById('commandInput');
+            const command = input.value.trim();
+
+            if (command) {
+                commandHistory.push(command);
+                historyIndex = -1;
+                processCommand(command);
+                input.value = '';
+            }
+        }
+
+        function runQuickCommand(command) {
+            processCommand(command);
+        }
+
+        function processCommand(command) {
+            const terminal = document.getElementById('terminalContent');
+            const currentInput = document.getElementById('currentInput');
+
+            // Remove typing indicator and show the command
+            const typingIndicator = currentInput.parentElement.querySelector('.typing-indicator');
+            if (typingIndicator) {
+                typingIndicator.remove();
+            }
+            currentInput.textContent = command;
+
+            // Add new input line
+            const newCommandLine = document.createElement('div');
+            newCommandLine.className = 'terminal-input mb-2';
+            newCommandLine.innerHTML = '$ <span id="currentInput"></span><span class="typing-indicator"></span>';
+            terminal.appendChild(newCommandLine.parentElement);
+
+            // Process the command
+            setTimeout(() => {
+                const response = getCommandResponse(command);
+                addTerminalOutput(response);
+            }, 300);
+        }
+
+        function getCommandResponse(command) {
+            const responses = {
+                'help': `AI CLI - AI-powered Git Assistant
+
+Available commands:
+  ai-cli commit        Generate conventional commit messages
+  ai-cli explain       Explain code changes
+  ai-cli init          Initialize configuration
+  ai-cli config        Show configuration
+  help                 Show this help message
+  status               Show Git status
+  clear                Clear terminal
+
+Demo-specific commands:
+  [command] --demo     Run demo version of command
+  [command] --scenario [name] Run predefined scenario`,
+
+                'ai-cli commit --demo': `🤖 AI is generating your commit message...
+📋 Staging all changes...
+📝 Analyzing 42 lines of changes...
+
+--- AI Generated Commit Message ---
+feat(ui): add interactive demo interface with terminal simulation
+
+- Implement responsive terminal with command history
+- Add quick command buttons for common operations
+- Include feature tabs and scenario demonstrations
+- Enhance user experience with smooth animations
+-----------------------------------
+
+Do you want to execute this commit? [Y/n] Y
+🔄 Executing git commit...
+✅ Commit successful!`,
+
+                'ai-cli explain --demo': `🔍 AI is analyzing the changes...
+
+📄 AI Analysis:
+## High-level Summary
+The changes implement a comprehensive interactive demo interface for AI CLI, providing users with a browser-based way to experience the tool's functionality.
+
+## Technical Details
+- **Frontend**: Built with HTML5, Tailwind CSS, and vanilla JavaScript
+- **Terminal Simulation**: Custom terminal component with command history and autocomplete
+- **Interactive Elements**: Quick command buttons and feature tabs for better UX
+- **Response System**: Simulated AI responses that demonstrate real functionality
+
+## Reasoning
+This demo interface allows potential users to experience AI CLI without installation, reducing adoption barriers and showcasing key features effectively.
+
+## Impact
+- Lower barrier to entry for new users
+- Better product demonstration capabilities
+- Improved conversion rates for the open-source project`,
+
+                'ai-cli init --demo': `🔧 Initializing AI CLI configuration...
+✓ Default model set to: local
+✓ Local model configured: gemma2:9b
+✓ Ollama URL set to: http://localhost:11434
+✓ Created PROJECT.md at: /demo/project/PROJECT.md
+✓ Created global config at: /home/user/.ai-cli/CONFIG.md
+⚠ MCP client initialization failed: MCP server not found in demo mode
+  This is normal in demo environment.
+
+🎉 AI CLI initialization complete!
+Run 'ai-cli commit' to generate your first AI-powered commit message.`,
+
+                'status': `On branch main
+Your branch is up to date with 'origin/main'.
+
+Changes to be committed:
+  (use "git restore --staged <file>..." to unstage)
+        modified:   src/ai_utils.rs
+        modified:   src/main.rs
+        new file:   docs/demo.html
+
+Changes not staged for commit:
+  (use "git add <file>..." to update what will be committed)
+  (use "git restore <file>..." to discard changes in working directory)
+        modified:   README.md
+
+Untracked files:
+  (use "git add <file>..." to include in what will be committed)
+        docs/assets/demo.css`,
+
+                'ai-cli commit --scenario daily': `🤖 AI is generating your commit message...
+📋 Analyzing daily development changes...
+
+--- AI Generated Commit Message ---
+feat(demo): implement interactive browser-based demo interface
+
+This change adds a comprehensive demo interface that allows users to try AI CLI directly in their browser. The demo includes:
+
+- Simulated terminal with command history and autocomplete
+- Interactive quick command buttons
+- Feature demonstration tabs
+- Common workflow scenarios
+- Responsive design for all devices
+
+The demo significantly lowers the barrier to entry for new users and serves as an effective marketing tool for the project.
+-----------------------------------
+
+✅ Demo commit scenario completed!`,
+
+                'clear': ''
+            };
+
+            if (command === 'clear') {
+                const terminal = document.getElementById('terminalContent');
+                terminal.innerHTML = '<div class="terminal-input mb-2">$ <span id="currentInput"></span><span class="typing-indicator"></span></div>';
+                return '';
+            }
+
+            return responses[command] || `Command not found: ${command}
+Type 'help' to see available commands.`;
+        }
+
+        function addTerminalOutput(text) {
+            const terminal = document.getElementById('terminalContent');
+            const newInput = terminal.lastElementChild;
+
+            const lines = text.split('\n');
+            lines.forEach((line, index) => {
+                if (line.trim()) {
+                    const outputLine = document.createElement('div');
+                    outputLine.className = 'terminal-output mb-2';
+
+                    if (line.includes('✓')) {
+                        outputLine.className += ' terminal-success';
+                    } else if (line.includes('⚠') || line.includes('not found')) {
+                        outputLine.className += ' terminal-error';
+                    }
+
+                    outputLine.textContent = line;
+                    terminal.insertBefore(outputLine, newInput);
+                }
+            });
+
+            terminal.scrollTop = terminal.scrollHeight;
+        }
+
+        function clearTerminal() {
+            processCommand('clear');
+        }
+
+        function showFeature(feature) {
+            const tabs = document.querySelectorAll('.feature-tab');
+            tabs.forEach(tab => {
+                tab.classList.remove('active');
+                tab.classList.add('bg-gray-50', 'hover:bg-gray-100');
+            });
+
+            event.target.closest('.feature-tab').classList.add('active');
+            event.target.closest('.feature-tab').classList.remove('bg-gray-50', 'hover:bg-gray-100');
+
+            const content = document.getElementById('featureContent');
+            const contents = {
+                'security': 'Multi-layer security with trusted folders, session-based approvals, and dangerous command detection.',
+                'performance': 'Built with Rust for maximum performance. Native binary with zero runtime dependencies.',
+                'ai-models': 'Support for multiple AI backends: local Ollama, OpenAI GPT-4, and Anthropic Claude with intelligent routing.'
+            };
+
+            content.innerHTML = `<p class="text-sm text-gray-600">${contents[feature]}</p>`;
+        }
+
+        // Focus on input when page loads
+        window.addEventListener('load', () => {
+            document.getElementById('commandInput').focus();
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,45 @@
+# Rust
+/target/
+Cargo.lock
+**/*.rs.bk
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Logs
+*.log
+
+# AI CLI specific
+.trusted_folders.json
+.ai-cli/
+
+# Test
+/tests/temp/
+
+# Environment
+.env
+.env.local
+.env.*.local
+
+# Distribution
+/dist/
+/build/
+
+# Backup
+*.bak
+*.backup
+
+# Temporary files
+*.tmp
+*.temp
+
+# Debug
+*.pdb

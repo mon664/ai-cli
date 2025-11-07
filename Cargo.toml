@@ -1,0 +1,55 @@
+[package]
+name = "ai-cli"
+version = "0.1.0"
+edition = "2021"
+authors = ["AI CLI Contributors"]
+description = "AI-powered CLI Git Assistant - Generate conventional commits and explain changes"
+license = "Apache-2.0"
+repository = "https://github.com/your-username/ai-cli"
+homepage = "https://github.com/your-username/ai-cli"
+keywords = ["git", "ai", "cli", "commit", "assistant"]
+categories = ["command-line-utilities", "development-tools"]
+
+[dependencies]
+# CLI 파서
+clap = { version = "4.5", features = ["derive"] }
+
+# 비동기 런타임
+tokio = { version = "1.38", features = ["full"] }
+
+# AI 백엔드 연동
+ollama-rs = "0.3.2"
+reqwest = { version = "0.12", features = ["json"] }
+
+# Git 연동
+git2 = "0.19"
+
+# 직렬화
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+
+# 오류 처리
+anyhow = "1.0"
+thiserror = "1.0"
+
+# 로깅
+tracing = "0.1"
+tracing-subscriber = "0.3"
+
+# 설정 관리
+config = "0.14"
+dirs = "5.0"
+
+# 파일 시스템
+walkdir = "2.5"
+
+[dev-dependencies]
+tempfile = "3.12"
+tokio-test = "0.4"
+assert_cmd = "2.0"
+predicates = "3.1"
+futures = "0.3"
+
+[[bin]]
+name = "ai-cli"
+path = "src/main.rs"

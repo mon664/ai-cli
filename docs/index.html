@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI CLI - AI-powered Git Assistant</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/themes/prism-tomorrow.min.css" rel="stylesheet">
+    <style>
+        .gradient-bg {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        }
+        .terminal {
+            background: #1e1e1e;
+            border-radius: 8px;
+            padding: 1rem;
+            font-family: 'Fira Code', 'Courier New', monospace;
+        }
+        .terminal-input {
+            color: #4ade80;
+        }
+        .terminal-output {
+            color: #e5e7eb;
+        }
+        .nav-link {
+            position: relative;
+            transition: color 0.3s;
+        }
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 0;
+            height: 2px;
+            background: #4ade80;
+            transition: width 0.3s;
+        }
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        .feature-card {
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        .feature-card:hover {
+            transform: translateY(-4px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        .code-block {
+            background: #282c34;
+            border-radius: 8px;
+            padding: 1rem;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Navigation -->
+    <nav class="fixed top-0 w-full bg-white shadow-sm z-50">
+        <div class="container mx-auto px-6 py-4">
+            <div class="flex items-center justify-between">
+                <div class="flex items-center">
+                    <div class="flex items-center space-x-2">
+                        <i class="fas fa-terminal text-green-500 text-2xl"></i>
+                        <span class="text-xl font-bold text-gray-800">AI CLI</span>
+                    </div>
+                </div>
+
+                <div class="hidden md:flex items-center space-x-8">
+                    <a href="#features" class="nav-link text-gray-700 hover:text-green-500">Features</a>
+                    <a href="#installation" class="nav-link text-gray-700 hover:text-green-500">Installation</a>
+                    <a href="#usage" class="nav-link text-gray-700 hover:text-green-500">Usage</a>
+                    <a href="#docs" class="nav-link text-gray-700 hover:text-green-500">Docs</a>
+                    <a href="https://github.com/your-username/ai-cli" class="nav-link text-gray-700 hover:text-green-500">
+                        <i class="fab fa-github"></i> GitHub
+                    </a>
+                </div>
+
+                <button class="md:hidden" onclick="toggleMobileMenu()">
+                    <i class="fas fa-bars text-gray-700 text-xl"></i>
+                </button>
+            </div>
+
+            <!-- Mobile Menu -->
+            <div id="mobileMenu" class="hidden md:hidden mt-4 pb-4">
+                <a href="#features" class="block py-2 text-gray-700 hover:text-green-500">Features</a>
+                <a href="#installation" class="block py-2 text-gray-700 hover:text-green-500">Installation</a>
+                <a href="#usage" class="block py-2 text-gray-700 hover:text-green-500">Usage</a>
+                <a href="#docs" class="block py-2 text-gray-700 hover:text-green-500">Docs</a>
+                <a href="https://github.com/your-username/ai-cli" class="block py-2 text-gray-700 hover:text-green-500">
+                    <i class="fab fa-github"></i> GitHub
+                </a>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section class="gradient-bg text-white py-20 mt-16">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row items-center">
+                <div class="md:w-1/2 mb-10 md:mb-0">
+                    <h1 class="text-4xl md:text-5xl font-bold mb-6">
+                        AI-powered Git Assistant
+                    </h1>
+                    <p class="text-xl mb-8 text-gray-200">
+                        Generate conventional commits and explain code changes with AI.
+                        Built with Rust for performance and security.
+                    </p>
+                    <div class="flex flex-col sm:flex-row space-y-4 sm:space-y-0 sm:space-x-4">
+                        <button onclick="scrollToSection('installation')" class="bg-green-500 hover:bg-green-600 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            <i class="fas fa-download mr-2"></i> Get Started
+                        </button>
+                        <button onclick="scrollToSection('demo')" class="border-2 border-white hover:bg-white hover:text-purple-700 text-white font-bold py-3 px-6 rounded-lg transition duration-300">
+                            <i class="fas fa-play mr-2"></i> Live Demo
+                        </button>
+                    </div>
+                </div>
+
+                <div class="md:w-1/2 md:pl-12">
+                    <div class="terminal">
+                        <div class="terminal-input">$ ai-cli commit</div>
+                        <div class="terminal-output mt-2">🤖 AI is generating your commit message...</div>
+                        <div class="terminal-output">📋 Analyzing 42 lines of changes...</div>
+                        <div class="terminal-output mt-2">--- AI Generated Commit Message ---</div>
+                        <div class="terminal-output text-green-400">feat(cli): add conventional commit generation with AI</div>
+                        <div class="terminal-output">-----------------------------------</div>
+                        <div class="terminal-input">$ </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Why Choose AI CLI?
+                </h2>
+                <p class="text-xl text-gray-600 max-w-3xl mx-auto">
+                    Experience the power of AI in your Git workflow with enterprise-grade security and performance.
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-3 gap-8">
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-robot"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">AI-Powered Commits</h3>
+                    <p class="text-gray-600 mb-4">
+                        Generate professional conventional commit messages that follow best practices automatically.
+                    </p>
+                    <ul class="text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Multiple AI models</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Conventional Commits</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Context-aware</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Enterprise Security</h3>
+                    <p class="text-gray-600 mb-4">
+                        Multi-layer security with trusted folders and session-based command approval.
+                    </p>
+                    <ul class="text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Trusted folders</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Command approval</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Danger detection</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-tachometer-alt"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Lightning Fast</h3>
+                    <p class="text-gray-600 mb-4">
+                        Built with Rust for maximum performance and minimal resource usage.
+                    </p>
+                    <ul class="text-sm text-gray-600">
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Native binary</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Cross-platform</li>
+                        <li><i class="fas fa-check text-green-500 mr-2"></i>Zero dependencies</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8 mt-12">
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-plug"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">MCP Integration</h3>
+                    <p class="text-gray-600">
+                        Extensible architecture with Model Context Protocol for unlimited integrations.
+                    </p>
+                </div>
+
+                <div class="feature-card bg-white p-8 rounded-lg shadow-lg">
+                    <div class="text-green-500 text-4xl mb-4">
+                        <i class="fas fa-globe"></i>
+                    </div>
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">Multiple AI Backends</h3>
+                    <p class="text-gray-600">
+                        Support for local Ollama, OpenAI, and Anthropic models with intelligent routing.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Installation Section -->
+    <section id="installation" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Quick Installation
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Get started in seconds with a single command
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6">Install via Cargo</h3>
+                    <div class="code-block">
+                        <pre><code class="language-bash">cargo install ai-cli</code></pre>
+                    </div>
+
+                    <h3 class="text-2xl font-bold text-gray-800 mb-6 mt-8">Build from Source</h3>
+                    <div class="code-block">
+                        <pre><code class="language-bash">git clone https://github.com/your-username/ai-cli.git
+cd ai-cli
+cargo build --release</code></pre>
+                    </div>
+
+                    <div class="mt-8 p-4 bg-green-50 border border-green-200 rounded-lg">
+                        <p class="text-green-800">
+                            <i class="fas fa-info-circle mr-2"></i>
+                            <strong>Prerequisites:</strong> Rust 1.91+ and Git 2.0+
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Usage Section -->
+    <section id="usage" class="py-20">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    How to Use
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Simple commands for powerful Git workflow automation
+                </p>
+            </div>
+
+            <div class="grid md:grid-cols-2 gap-8">
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-rocket text-green-500 mr-2"></i>
+                        Initialize Configuration
+                    </h3>
+                    <div class="code-block mb-4">
+                        <pre><code class="language-bash">ai-cli init --model openai --openai-key YOUR_API_KEY</code></pre>
+                    </div>
+                    <p class="text-gray-600">
+                        Set up AI CLI with your preferred AI model and API keys.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-code-branch text-green-500 mr-2"></i>
+                        Generate Commit Messages
+                    </h3>
+                    <div class="code-block mb-4">
+                        <pre><code class="language-bash">git add .
+ai-cli commit</code></pre>
+                    </div>
+                    <p class="text-gray-600">
+                        Let AI analyze your changes and generate professional commit messages.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-file-alt text-green-500 mr-2"></i>
+                        Explain Changes
+                    </h3>
+                    <div class="code-block mb-4">
+                        <pre><code class="language-bash">ai-cli explain --detailed --format markdown</code></pre>
+                    </div>
+                    <p class="text-gray-600">
+                        Get detailed explanations of code changes in various formats.
+                    </p>
+                </div>
+
+                <div class="bg-white rounded-lg shadow-lg p-6">
+                    <h3 class="text-xl font-bold text-gray-800 mb-4">
+                        <i class="fas fa-cog text-green-500 mr-2"></i>
+                        Check Configuration
+                    </h3>
+                    <div class="code-block mb-4">
+                        <pre><code class="language-bash">ai-cli config --verbose</code></pre>
+                    </div>
+                    <p class="text-gray-600">
+                        View your current AI CLI configuration and settings.
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Interactive Demo Section -->
+    <section id="demo" class="py-20 bg-gray-100">
+        <div class="container mx-auto px-6">
+            <div class="text-center mb-16">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-800 mb-4">
+                    Try It Live
+                </h2>
+                <p class="text-xl text-gray-600">
+                    Experience AI CLI in your browser (demo mode)
+                </p>
+            </div>
+
+            <div class="max-w-4xl mx-auto">
+                <div class="bg-white rounded-lg shadow-lg p-8">
+                    <div class="terminal">
+                        <div class="flex items-center mb-4">
+                            <span class="text-red-500">●</span>
+                            <span class="text-yellow-500 ml-2">●</span>
+                            <span class="text-green-500 ml-2">●</span>
+                            <span class="ml-4 text-gray-400">ai-cli-demo</span>
+                        </div>
+
+                        <div id="demoTerminal" class="space-y-2">
+                            <div class="terminal-input">$ ai-cli commit --help</div>
+                            <div class="terminal-output mt-2">AI-powered CLI Git Assistant</div>
+                            <div class="terminal-output">Generate conventional commit messages based on staged changes</div>
+                            <div class="terminal-output"></div>
+                            <div class="terminal-output">Usage: ai-cli commit [OPTIONS]</div>
+                            <div class="terminal-output"></div>
+                            <div class="terminal-output">Options:</div>
+                            <div class="terminal-output">  -m, --message &lt;MESSAGE&gt;  Provide extra context or instructions</div>
+                            <div class="terminal-output">  -a, --all               Automatically stage all changes</div>
+                            <div class="terminal-output">  -y, --yes               Force commit without confirmation</div>
+                            <div class="terminal-output">  -h, --help              Print help</div>
+                        </div>
+
+                        <div class="mt-4 flex items-center">
+                            <span class="terminal-input">$ </span>
+                            <input
+                                type="text"
+                                id="demoInput"
+                                class="bg-transparent border-none outline-none ml-2 text-green-400 flex-1"
+                                placeholder="Try 'ai-cli explain --help'"
+                                onkeypress="handleDemoInput(event)"
+                            >
+                        </div>
+                    </div>
+
+                    <div class="mt-6 text-center">
+                        <p class="text-gray-600 text-sm">
+                            <i class="fas fa-info-circle mr-1"></i>
+                            This is a demo. Try commands like <code class="bg-gray-200 px-2 py-1 rounded">ai-cli --help</code>,
+                            <code class="bg-gray-200 px-2 py-1 rounded">ai-cli explain --help</code>, or
+                            <code class="bg-gray-200 px-2 py-1 rounded">ai-cli config --help</code>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="bg-gray-900 text-white py-12">
+        <div class="container mx-auto px-6">
+            <div class="flex flex-col md:flex-row justify-between items-center">
+                <div class="mb-6 md:mb-0">
+                    <div class="flex items-center space-x-2 mb-2">
+                        <i class="fas fa-terminal text-green-500 text-2xl"></i>
+                        <span class="text-xl font-bold">AI CLI</span>
+                    </div>
+                    <p class="text-gray-400">
+                        AI-powered Git Assistant for developers
+                    </p>
+                </div>
+
+                <div class="flex space-x-6">
+                    <a href="https://github.com/your-username/ai-cli" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-github text-2xl"></i>
+                    </a>
+                    <a href="https://crates.io/crates/ai-cli" class="text-gray-400 hover:text-white transition">
+                        <i class="fab fa-rust text-2xl"></i>
+                    </a>
+                    <a href="https://docs.rs/ai-cli" class="text-gray-400 hover:text-white transition">
+                        <i class="fas fa-book text-2xl"></i>
+                    </a>
+                </div>
+            </div>
+
+            <div class="mt-8 pt-8 border-t border-gray-800 text-center text-gray-400">
+                <p>&copy; 2025 AI CLI Contributors. Licensed under Apache 2.0.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/components/prism-core.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/prism/1.24.1/plugins/autoloader/prism-autoloader.min.js"></script>
+    <script>
+        function toggleMobileMenu() {
+            const menu = document.getElementById('mobileMenu');
+            menu.classList.toggle('hidden');
+        }
+
+        function scrollToSection(sectionId) {
+            const element = document.getElementById(sectionId);
+            element.scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function handleDemoInput(event) {
+            if (event.key === 'Enter') {
+                const input = event.target;
+                const command = input.value.trim();
+                const terminal = document.getElementById('demoTerminal');
+
+                if (command) {
+                    // Add user command to terminal
+                    const commandLine = document.createElement('div');
+                    commandLine.className = 'terminal-input';
+                    commandLine.textContent = `$ ${command}`;
+                    terminal.appendChild(commandLine);
+
+                    // Simulate response
+                    setTimeout(() => {
+                        const responseLine = document.createElement('div');
+                        responseLine.className = 'terminal-output mt-2';
+
+                        if (command.includes('explain')) {
+                            responseLine.textContent = 'Explain the staged (or specific commit) changes in natural language';
+                        } else if (command.includes('config')) {
+                            responseLine.textContent = 'Show current configuration';
+                        } else if (command === 'ai-cli --help') {
+                            responseLine.innerHTML = 'AI-powered CLI Git Assistant<br>Available commands: commit, explain, init, config';
+                        } else {
+                            responseLine.textContent = `Command not recognized: ${command}`;
+                        }
+
+                        terminal.appendChild(responseLine);
+                        terminal.scrollTop = terminal.scrollHeight;
+                    }, 500);
+
+                    input.value = '';
+                }
+            }
+        }
+
+        // Smooth scroll for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({ behavior: 'smooth' });
+                }
+            });
+        });
+
+        // Add scroll effect to navigation
+        window.addEventListener('scroll', function() {
+            const nav = document.querySelector('nav');
+            if (window.scrollY > 100) {
+                nav.classList.add('shadow-lg');
+            } else {
+                nav.classList.remove('shadow-lg');
+            }
+        });
+    </script>
+</body>
+</html>
